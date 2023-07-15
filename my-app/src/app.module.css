@@ -1,0 +1,20 @@
+.app {
+	margin-left: 20px;
+	text-align: left;
+}
+
+.red {
+	color: red;
+}
+.darkblue {
+	color: darkblue;
+}
+
+.buttons {
+	margin: 20px;
+}
+
+.button {
+	margin: 10px;
+	padding: 10px;
+}
