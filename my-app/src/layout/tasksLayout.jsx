@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useRequestDeleteTask, useRequestAddTask } from '../components';
 
+import { Input } from './components/input';
+
 import styles from './tasksLayout.module.css';
 
 export const Item = ({
@@ -9,6 +11,8 @@ export const Item = ({
 	el = '',
 	refreshTasks,
 	setRefreshTasks,
+	onClickFirst,
+	onClickSecond,
 }) => {
 	const [task, setTask] = useState(el.task);
 	const [showInput, setShowInput] = useState(false);
@@ -45,29 +49,22 @@ export const Item = ({
 
 	return (
 		<div className={styles.wrapper}>
-			{showInput ? (
-				<input
-					className={styles.inputField}
-					name={'task'}
-					type={'text'}
-					placeholder={'Заполните задачу'}
-					value={task}
-					onChange={onChangeTask}
-				></input>
-			) : (
-				<div className={styles.task}>- {task}</div>
-			)}
+			<Input showInput={showInput} task={task} onChangeTask={onChangeTask} />
 			<div className={styles.buttons}>
 				{showInput ? (
 					<>
 						<button
 							id={'but1' + el.id}
 							className={styles.button}
-							onClick={confirmAddingTask}
+							onClick={onClickFirst}
 						>
 							{buttonFirst.hidden}
 						</button>
-						<button id={'but2' + el.id} className={styles.button} onClick={onClick4}>
+						<button
+							id={'but2' + el.id}
+							className={styles.button}
+							onClick={onClickSecond}
+						>
 							{buttonSecond.hidden}
 						</button>
 					</>

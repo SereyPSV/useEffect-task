@@ -9,6 +9,7 @@ import {
 	buttonEditSave,
 	buttonDeleteConfirmation,
 	buttonUpdateConfirmation,
+	buttonSearch,
 } from './utils/nameButtons';
 
 export const App = () => {
@@ -29,7 +30,20 @@ export const App = () => {
 					{displaySortedObjects ? buttonSorting.hidden : buttonSorting.main}
 				</button>
 			</div>
-
+			<div className={styles.item}>
+				<Item
+					buttonFirst={buttonSearch}
+					buttonSecond={buttonSorting}
+					item="Пустая строка"
+					el={{ id: 'add', task: '' }}
+					showBtn2={showBtn2}
+					setShowBtn2={setShowBtn2}
+					refreshTasks={refreshTasks}
+					setRefreshTasks={setRefreshTasks}
+					onClickFirst={sortTasks}
+					onClickSecond={sortTasks}
+				/>
+			</div>
 			<div className={styles.item}>
 				<Item
 					buttonFirst={buttonAddSave}
