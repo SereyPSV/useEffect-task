@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react';
+import { ref, onValue } from 'firebase/database';
+import { db } from '../firebase';
 
-export const useRequestGetTasks = (refreshTasks) => {
+export const useRequestGetTasks = () => {
 	const [tasks, setTasks] = useState([]);
 	useEffect(() => {
-		fetch('http://localhost:3030/task')
-			.then((loadedData) => loadedData.json())
+		const tasksDatabaseRef = ref(db, 'tasks');
 
-			.then((loadedTasks) => {
-				setTasks(loadedTasks);
-			});
-	}, [refreshTasks]);
+		return onValue(tasksDatabaseRef, (snapshot) => {
+			const loadedTasks = snapshot.val() || [];
+			setTasks(loadedTasks);
+		});
+	}, []);
 
 	return { tasks };
 };

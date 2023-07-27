@@ -1,3 +1,5 @@
+import { ref, push, set } from 'firebase/database';
+import { db } from '../firebase';
 export const useRequestAddTask = (
 	showInput,
 	setShowInput,
@@ -13,40 +15,30 @@ export const useRequestAddTask = (
 			return;
 		}
 		if (id === 'add') {
-			console.log(showInput, 'НЕ Отправить', textTask, id);
+			console.log(showInput, 'Добавить', textTask, id);
+			const tasksDatabaseRef = ref(db, 'tasks');
 
-			fetch('http://localhost:3030/task/', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json;charset=utf-8' },
-				body: JSON.stringify({
-					task: textTask,
-					state: false,
-				}),
-			})
-				.then((rawResponse) => rawResponse.json())
-				.then((response) => {
-					console.log('Задание добавлено, ответ сервера:', response);
-					setRefreshTasks(!refreshTasks);
-					setTask('');
-
-					setShowInput(false);
-				});
+			push(tasksDatabaseRef, {
+				task: textTask,
+				state: false,
+			}).then((response) => {
+				console.log('Задание добавлено, ответ сервера:', response);
+				setRefreshTasks(!refreshTasks);
+				setTask('');
+				setShowInput(false);
+				setRefreshTasks(!refreshTasks);
+			});
 		} else {
-			fetch(`http://localhost:3030/task/${id}`, {
-				method: 'PUT',
-				headers: { 'Content-Type': 'application/json;charset=utf-8' },
-				body: JSON.stringify({
-					task: textTask,
-					state: false,
-				}),
-			})
-				.then((rawResponse) => rawResponse.json())
-				.then((response) => {
-					console.log('Задание добавлено, ответ сервера:', response);
-					setRefreshTasks(!refreshTasks);
-					setShowInput(false);
-				})
-				.finally(() => 'setIsCreating(false)');
+			console.log('Изменить', textTask, id);
+			const tasksDatabaseRef = ref(db, `tasks/${id}`);
+			set(tasksDatabaseRef, {
+				task: textTask,
+				state: false,
+			}).then((response) => {
+				console.log('Задание добавлено, ответ сервера:', response);
+				setRefreshTasks(!refreshTasks);
+				setShowInput(false);
+			});
 		}
 	};
 	return { confirmAddingTask, textTask };
